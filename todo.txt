@@ -1,0 +1,7 @@
+[✔️] CREAR LOGIN
+
+[✔️] CREAR UNA RUTA PROTEGIDA
+
+[ ] Implementar JWT sobre la estructura actual
+
+[ ] Implementar DB SQL y guardar usuarios
