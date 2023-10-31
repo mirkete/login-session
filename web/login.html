@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Restricted page</title>
+  <style>
+    *{
+      box-sizing: border-box;
+    }
+
+    html,body{
+      margin: 0;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: white;
+    }
+
+    .wrapper{
+      display: grid;
+      place-content: center;
+      height: 100%;
+    }
+
+    #user-form{
+      width: 350px;
+      height: 500px;
+      display: flex;
+      flex-flow: column nowrap;
+      text-align: center;
+      align-items: center;
+      justify-content: space-around;
+      gap: 10px;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0px 0px 10px 4px rgb(0,0,0,.5);
+      background-color: white;
+    }
+    
+    .custom-input{
+      background: none;
+      outline: none;
+      border: none;
+      border-bottom: 2px solid grey;
+      padding: 10px;
+      width: 100%;
+    }
+    
+    .custom-button{
+      cursor: pointer;
+      padding: 10px;
+      outline: none;
+      border: none;
+      border-radius: 10px;
+      background: rgb(243, 45, 78);
+      box-shadow: 0px 0px 5px 3px pink;
+      font-size: larger;
+      color: white;
+      font-weight: 700;
+    }
+    
+    </style>
+</head>
+<body>
+  <div class="wrapper">
+    <form action="" id="user-form">
+      <h1>Login</h1>
+      <input class="custom-input" type="text" id="username" placeholder="Inserte su nombre de usuario">
+      <input class="custom-input" type="password" id="password" placeholder="Inserte su contraseña">
+      <button class="custom-button" type="submit">Enviar</button>
+    </form>
+  </div>
+  <script type="module">
+    const userForm = document.getElementById("user-form")
+    const username = document.getElementById("username")
+    const password = document.getElementById("password")
+    const actualURL = new URL("http://localhost:3000/")
+
+    userForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+      if(username.value && password.value){
+        fetch(actualURL.origin + "/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: username.value,
+            password: password.value
+          })
+        })
+        .then((data) => {
+          return data.text()
+        }).then((token) => {
+          localStorage.setItem("token", token)
+          window.location.replace("http://localhost:3000")
+        })
+      }
+      username.value = ""
+      password.value = ""
+    })
+  </script>
+</body>
+</html>
