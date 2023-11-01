@@ -11,8 +11,9 @@
   <script type="module">
     const htmlContainer = document.querySelector(".wrapper")
     const token = window.localStorage.getItem("token")
+    const actualURL = new URL(window.location.href)
 
-    fetch("http://localhost:3000/protected", {
+    fetch(actualURL.origin + "/protected", {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -22,7 +23,7 @@
         const data = await res.text()
         return htmlContainer.innerHTML = data
       }
-      window.location.replace("http://localhost:3000/login")
+      window.location.replace("http://localhost:3000/register")
     })
   </script>
 </body>

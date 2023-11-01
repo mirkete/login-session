@@ -75,12 +75,12 @@
     const userForm = document.getElementById("user-form")
     const username = document.getElementById("username")
     const password = document.getElementById("password")
-    const actualURL = new URL("http://localhost:3000/")
+    const actualURL = new URL(window.location.href)
 
     userForm.addEventListener("submit", (e) => {
       e.preventDefault()
       if(username.value && password.value){
-        fetch(actualURL.origin + "/login", {
+        fetch(actualURL.origin + "/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -94,7 +94,7 @@
           return data.text()
         }).then((token) => {
           localStorage.setItem("token", token)
-          window.location.replace("http://localhost:3000")
+          window.location.replace(actualURL.origin)
         })
       }
       username.value = ""

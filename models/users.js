@@ -1,18 +1,18 @@
 import crypto from "node:crypto"
 import jwt from "jsonwebtoken"
+import mysql from "mysql2/promise"
 
 const SECRET_KEY = "My secret key here"
+const connection = await mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "mirkito18",
+  database: "jwt"
+})
 
 async function getUser (token) {
   const splittedToken = token.split(" ")[1]
-  let user
-  try {
-    user = jwt.verify(splittedToken, SECRET_KEY)
-    return user
-  } catch (e) {
-    console.log(e)
-    return null
-  }
+  return jwt.verify(splittedToken, SECRET_KEY)
 }
 
 async function createUser (userData) {
@@ -23,17 +23,20 @@ async function createUser (userData) {
   }
 
   const token = jwt.sign(userForToken, SECRET_KEY)
+
   return token
 }
+
 export class UsersModel {
   static protectedRoute = async (token) => {
     if (!token) {
       return { success: false }
     }
-
-    const user = await getUser(token)
-    if (!user) {
-      return { sucess: false }
+    let user
+    try {
+      user = await getUser(token)
+    } catch (error) {
+      return { success: false, error }
     }
 
     return { success: true, data: `<h1>PROTECTED DATA. Hi ${user.username} </h1>` }
@@ -41,15 +44,16 @@ export class UsersModel {
 
   static createUser = async (user) => {
     if (!user) {
-      return { success: false }
+      return { success: false, error: { name: "Invalid Request" } }
     }
 
+    let token
     try {
-      const token = await createUser(user)
-      return { success: true, data: token }
-    } catch (e) {
-      console.error(e)
-      return { success: false }
+      token = await createUser(user)
+    } catch (error) {
+      return { success: false, error }
     }
+
+    return { success: true, data: token }
   }
 }

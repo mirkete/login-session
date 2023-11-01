@@ -6,8 +6,8 @@ export function mainRoutes ({ model }) {
   const usersController = new UsersController({ model })
 
   mainRouter.get("/protected", usersController.protectedRoute)
-  mainRouter.get("/login", usersController.loginUser)
-  mainRouter.post("/login", usersController.createUser)
+  mainRouter.get("/register", usersController.registerPage)
+  mainRouter.post("/register", usersController.createUser)
 
   return mainRouter
 }

@@ -1,3 +1,5 @@
+import { errorHandler } from "../middlewares/handleErrors.js"
+
 export class UsersController {
   constructor({ model }) {
     this.model = model
@@ -7,21 +9,23 @@ export class UsersController {
     const token = req.headers["authorization"]
     const result = await this.model.protectedRoute(token)
     if (!result.success) {
-      return res.status(401).send("UNATHORIZED")
+      return errorHandler(result.error, req, res)
     }
+
     res.status(200).send(result.data)
   }
 
-  loginUser = async (req, res) => {
-    res.sendFile(process.cwd() + "/web/login.html")
+  registerPage = async (req, res) => {
+    res.sendFile(process.cwd() + "/web/register.html")
   }
 
   createUser = async (req, res) => {
 
     const result = await this.model.createUser(req.body)
     if (!result.success) {
-      return res.status(401).send("Bad request")
+      return errorHandler(result.error, req, res)
     }
+
     res.status(200).send(result.data)
   }
 }
