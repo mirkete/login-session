@@ -7,6 +7,7 @@ export function mainRoutes ({ model }) {
 
   mainRouter.get("/protected", usersController.protectedRoute)
   mainRouter.get("/register", usersController.registerPage)
+  mainRouter.get("/login", usersController.loginPage)
   mainRouter.post("/register", usersController.createUser)
   mainRouter.post("/login", usersController.loginUser)
 

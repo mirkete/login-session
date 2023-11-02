@@ -14,6 +14,7 @@
       <input class="custom-input" type="text" id="username" placeholder="Inserte su nombre de usuario">
       <input class="custom-input" type="password" id="password" placeholder="Inserte su contraseña">
       <button class="custom-button" type="submit">Enviar</button>
+      <small>or <a href="/register">Register</a></small>
     </form>
   </div>
   <script type="module">
@@ -35,10 +36,17 @@
             password: password.value
           })
         })
-        .then((data) => {
-          return data.text()
+        .then((res) => {
+          if(res.ok){
+            return res.text()
+          }
+          throw new Error("error")
         }).then((token) => {
-          console.log(token)
+          window.localStorage.setItem("token", token)
+          return window.location.replace(actualURL.origin)
+        })
+        .catch((e) => {
+          alert("Invalid user or password. Try again")
         })
       }
       username.value = ""

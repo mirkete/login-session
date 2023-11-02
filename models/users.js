@@ -38,7 +38,26 @@ async function createUser (userData) {
 }
 
 async function logUser (user) {
-  // Check in DB and return token here
+  return new Promise(async (resolve, reject) => {
+    const { username, password } = user
+
+    let result
+    try {
+      result = await connection.execute(
+        'SELECT BIN_TO_UUID(id) AS id, username FROM users ' +
+        'WHERE username = ? AND password = ?',
+        [username, password]
+      )
+    } catch (error) {
+      return reject(error)
+    }
+
+    const userForToken = result[0][0]
+    if (!userForToken || Object.keys(userForToken).length !== 2) return reject({ name: "UserNotFound" })
+
+    const token = jwt.sign(userForToken, SECRET_KEY)
+    return resolve(token)
+  })
 }
 
 export class UsersModel {
@@ -72,6 +91,17 @@ export class UsersModel {
   }
 
   static loginUser = async (user) => {
-    // Communicate with logUser function
+    if (!(user && user.username && user.password)) {
+      return { success: false, error: { name: "InvalidRequest" } }
+    }
+
+    let token
+    try {
+      token = await logUser(user)
+    } catch (error) {
+      return { success: false, error }
+    }
+
+    return { success: true, data: token }
   }
 }

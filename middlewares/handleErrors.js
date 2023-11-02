@@ -8,6 +8,9 @@ const errors = {
   InvalidRequest: (req, res) => {
     res.status(400).send("Invalid request")
   },
+  UserNotFound: (req, res) => {
+    res.status(401).send("User not found")
+  },
   defaultError: (req, res) => {
     res.status(500).end()
   }

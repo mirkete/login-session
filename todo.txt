@@ -6,4 +6,4 @@
 
 [✔️] Implementar DB SQL y guardar usuarios
 
-[ ] Añadir login y manejar los inicios de sesiones
+[✔️] Añadir login y manejar los inicios de sesiones

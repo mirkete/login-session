@@ -29,7 +29,16 @@ export class UsersController {
     res.status(200).send(result.data)
   }
 
+  loginPage = async (req, res) => {
+    res.sendFile(process.cwd() + "/web/login.html")
+  }
+
   loginUser = async (req, res) => {
-    // communicate with model here
+    const result = await this.model.loginUser(req.body)
+    if (!result.success) {
+      return errorHandler(result.error, req, res)
+    }
+
+    res.status(200).send(result.data)
   }
 }
