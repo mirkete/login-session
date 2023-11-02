@@ -16,21 +16,35 @@ async function getUser (token) {
 }
 
 async function createUser (userData) {
-  const id = crypto.randomUUID()
-  const userForToken = {
-    id,
-    ...userData
-  }
+  return new Promise(async (resolve, reject) => {
 
-  const token = jwt.sign(userForToken, SECRET_KEY)
+    const id = crypto.randomUUID()
+    if (!userData.username || !userData.password) {
+      reject({ name: "InvalidRequest" })
+      return
+    }
 
-  return token
+    const { username, password } = userData
+    const token = jwt.sign({ id, username, password }, SECRET_KEY)
+
+    await connection.execute(
+      'INSERT INTO users (id, username, password) ' +
+      'VALUES (UUID_TO_BIN(?), ?, ?)',
+      [id, username, password]
+    )
+
+    return resolve(token)
+  })
+}
+
+async function logUser (user) {
+  // Check in DB and return token here
 }
 
 export class UsersModel {
   static protectedRoute = async (token) => {
     if (!token) {
-      return { success: false }
+      return { success: false, error: { name: "InvalidRequest" } }
     }
     let user
     try {
@@ -44,7 +58,7 @@ export class UsersModel {
 
   static createUser = async (user) => {
     if (!user) {
-      return { success: false, error: { name: "Invalid Request" } }
+      return { success: false, error: { name: "InvalidRequest" } }
     }
 
     let token
@@ -55,5 +69,9 @@ export class UsersModel {
     }
 
     return { success: true, data: token }
+  }
+
+  static loginUser = async (user) => {
+    // Communicate with logUser function
   }
 }

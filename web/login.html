@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Restricted page</title>
+  <title>Login - Learning Login-Session</title>
   <link rel="stylesheet" href="/src/form-styles.css">
 </head>
 <body>
   <div class="wrapper">
     <form action="" id="user-form">
-      <h1>Register</h1>
+      <h1>Login</h1>
       <input class="custom-input" type="text" id="username" placeholder="Inserte su nombre de usuario">
       <input class="custom-input" type="password" id="password" placeholder="Inserte su contraseña">
       <button class="custom-button" type="submit">Enviar</button>
@@ -25,7 +25,7 @@
     userForm.addEventListener("submit", (e) => {
       e.preventDefault()
       if(username.value && password.value){
-        fetch(actualURL.origin + "/register", {
+        fetch(actualURL.origin + "/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -38,8 +38,7 @@
         .then((data) => {
           return data.text()
         }).then((token) => {
-          localStorage.setItem("token", token)
-          window.location.replace(actualURL.origin)
+          console.log(token)
         })
       }
       username.value = ""

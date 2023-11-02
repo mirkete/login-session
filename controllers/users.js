@@ -28,4 +28,8 @@ export class UsersController {
 
     res.status(200).send(result.data)
   }
+
+  loginUser = async (req, res) => {
+    // communicate with model here
+  }
 }

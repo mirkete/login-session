@@ -5,6 +5,9 @@ const errors = {
   JsonWebTokenError: (req, res) => {
     res.status(401).send("Invalid token")
   },
+  InvalidRequest: (req, res) => {
+    res.status(400).send("Invalid request")
+  },
   defaultError: (req, res) => {
     res.status(500).end()
   }

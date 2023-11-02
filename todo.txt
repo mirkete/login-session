@@ -4,4 +4,6 @@
 
 [✔️] Implementar JWT sobre la estructura actual
 
-[ ] Implementar DB SQL y guardar usuarios
+[✔️] Implementar DB SQL y guardar usuarios
+
+[ ] Añadir login y manejar los inicios de sesiones
